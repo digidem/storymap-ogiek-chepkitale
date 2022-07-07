@@ -13,7 +13,7 @@ var config = {
     useCustomLayers: false, //set true for enabling custom layers from sources.js
     bookmarks: false,
     chapterReturn: false,
-    title: 'The History of the Dispossession of the Lands of the Ogiek of Mount Elgon in Kenya',
+    title: 'Dispossession of the Ancestral Lands of the Ogiek of Mount Elgon in Kenya',
     logo: 'images/CIPDP-logo.png',
     subtitle: 'Chepkitale Indigenous Peoples\' Development Project',
     byline: '',
