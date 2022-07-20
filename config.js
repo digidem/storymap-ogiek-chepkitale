@@ -377,10 +377,6 @@ var config = {
                     opacity: 1
                 },    
                 {
-                    layer: 'vii-extent',
-                    opacity: 0
-                }, 
-                {
                     layer: 'vi-elgon-chepyuk',
                     opacity: 0.5
                 },                  
@@ -391,7 +387,11 @@ var config = {
                 {
                     layer: 'vii-elgon-game-reserve',
                     opacity: 0.5
-                },                     
+                },     
+                {
+                    layer: 'viii-shamba',
+                    opacity: 0
+                },                  
             ],
             onChapterExit: []
         },
@@ -399,11 +399,11 @@ var config = {
             id: 'ch9',
             alignment: 'left',
             hidden: false,
-            title: 'Our current efforts',
-            image: 'images/mapping.jpg',
-            caption: 'Photo credit: Rudo Kemper',
-            description: 'To counter this loss of territory, the Ogiek are taking action to advocate for their land rights and protect their ancestral forests. The Chepkitale Indigenous Peoples Development Project (CIPDP) was founded by the community with the mission of undertaking a rights-based approach to forest conservation. A crucial role of the organization is to legitimize traditional Ogiek practices and territory through the creation of official community documents and community mapping. Such strategies have allowed them to claim sovereignty in a language understood by governmental authorities.<br><br><div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://www.youtube-nocookie.com/embed/aqUjRnXp8Rw?controls=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="fullscreen; picture-in-picture"></iframe></div><br><br>Currently, CIPDP, with support from the Forest Peoples Programme (FPP) and Digital Democracy (Dd), are empowering the Ogiek community to conduct comprehensive mapping of their ancestral lands, as well as...<br><br>Learn more about CIPDP at <a href="https://chepkitale.org" target="_blank">https://chepkitale.org</a>',
-            legend: '<span id="block"><hr style="border: 0; border-bottom: 3px dashed #f57729;"></span><span id="text">Extent of Ogiek ancestral lands</span><br><span id="block"><hr style="border: 0; border-bottom: 3px dashed #000;"></span><span id="text">Approximate area of Ogiek management</span><br><span id="block" style="background-color: #fb4b4b; opacity: 0.5;"></span><span id="text">Chepkitale Game Reserve</span><br><span id="block" style="background-color: #989090; opacity: 0.5;"></span><span id="text">Chepyuk Degazetted Area</span><br><span id="block" style="background-color: #56b72a; opacity: 0.5;"></span><span id="text">Mount Elgon National Park</span><br><span id="block" style="background-color: #d5e12d; opacity: 0.5;"></span><span id="text">KFS Forest Reserve</span><br>',
+            title: 'Destruction of Indigenous forests by the PELIS ("Shamba") System (up to 2018)',
+            image: 'images/pelis.png',
+            caption: 'Left: View of Mt. Elgon from the top of the hill about 30km west of Kitale. Right: A tree plantation of non-native trees planted by KFS. Photos: Nicole Harris/RRI. Link: <a href="https://rightsandresources.org/blog/in-kenya-the-ogiek-of-mt-elgon-are-a-community-on-the-frontlines-of-forest-conservation/" target="_blank">Rights and Resources Initiative</a>',
+            description: 'Tree plantations are common in the lower mountainous region of the gazetted Mt. Elgon Forest Reserve and are part of the controversial Shamba System that the Kenyan government, and subsequently KFS, have been implementing in one form or another since the colonial period.<br><br>Also known as the Plantation Establishment for Livelihood Improvement Scheme (PELIS), KFS cuts native forests and replaces them with plantations of quick-growing and imported foreign tree species. These trees are subsequently sold to commercial timber companies and logged. The observed negative changes to the local biodiversity are proof that these tree plantations are harmful to both local wildlife and the environment since they are unable to achieve the crucial ecological functions that a natural biologically rich forest ecosystem can provide. The exotic trees that KFS has planted do not flower and are detrimental to the region’s honeybees, who produce honey that is cultivated by the Ogiek community.',
+            legend: '<span id="block"><hr style="border: 0; border-bottom: 3px dashed #f57729;"></span><span id="text">Extent of Ogiek ancestral lands</span><br><span id="block" style="background-color: #ff0000; opacity: 0.5;"></span><span id="text">Forests destroyed by PELIS</span><br><span id="block" style="background-color: #fb4b4b; opacity: 0.5;"></span><span id="text">Chepkitale Game Reserve</span><br><span id="block" style="background-color: #989090; opacity: 0.5;"></span><span id="text">Chepyuk Degazetted Area</span><br><span id="block" style="background-color: #56b72a; opacity: 0.5;"></span><span id="text">Mount Elgon National Park</span><br><span id="block" style="background-color: #d5e12d; opacity: 0.5;"></span><span id="text">KFS Forest Reserve</span><br>',
             location: {
                 center: [34.58435, 1.00483],
                 zoom: 10,
@@ -427,9 +427,59 @@ var config = {
                     opacity: 1
                 },    
                 {
-                    layer: 'vii-extent',
+                    layer: 'vi-elgon-chepyuk',
+                    opacity: 0.5
+                },                  
+                {
+                    layer: 'vi-elgon-forest-reserves',
+                    opacity: 0.5
+                },  
+                {
+                    layer: 'vii-elgon-game-reserve',
+                    opacity: 0.5
+                },                              
+                {
+                    layer: 'viii-shamba',
+                    opacity: 0.5
+                },                
+                {
+                    layer: 'ix-extent',
+                    opacity: 0
+                },       
+            ],
+            onChapterExit: []
+        },
+        {
+            id: 'ch10',
+            alignment: 'left',
+            hidden: false,
+            title: 'Our current efforts',
+            image: 'images/mapping.jpg',
+            caption: 'Photo credit: Rudo Kemper',
+            description: 'To counter this loss of territory, the Ogiek are taking action to advocate for their land rights and protect their ancestral forests. The Chepkitale Indigenous Peoples Development Project (CIPDP) was founded by the community with the mission of undertaking a rights-based approach to forest conservation. A crucial role of the organization is to legitimize traditional Ogiek practices and territory through the creation of official community documents and community mapping. Such strategies have allowed them to claim sovereignty in a language understood by governmental authorities.<br><br><div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://www.youtube-nocookie.com/embed/nG_LjkWNY1E?controls=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="fullscreen; picture-in-picture"></iframe></div><br><br>Currently, CIPDP, with support from the Forest Peoples Programme (FPP) and Digital Democracy (Dd), are empowering the Ogiek community to conduct comprehensive mapping of their ancestral lands, as well as...<br><br>Learn more about CIPDP at <a href="https://chepkitale.org" target="_blank">https://chepkitale.org</a>',
+            legend: '<span id="block"><hr style="border: 0; border-bottom: 3px dashed #f57729;"></span><span id="text">Extent of Ogiek ancestral lands</span><br><span id="block"><hr style="border: 0; border-bottom: 3px dashed #000;"></span><span id="text">Approximate area of Ogiek management</span><br><span id="block" style="background-color: #ff0000; opacity: 0.5;"></span><span id="text">Forests destroyed by PELIS</span><br><span id="block" style="background-color: #fb4b4b; opacity: 0.5;"></span><span id="text">Chepkitale Game Reserve</span><br><span id="block" style="background-color: #989090; opacity: 0.5;"></span><span id="text">Chepyuk Degazetted Area</span><br><span id="block" style="background-color: #56b72a; opacity: 0.5;"></span><span id="text">Mount Elgon National Park</span><br><span id="block" style="background-color: #d5e12d; opacity: 0.5;"></span><span id="text">KFS Forest Reserve</span><br>',
+            location: {
+                center: [34.58435, 1.00483],
+                zoom: 10,
+
+            },
+            mapAnimation: 'flyTo',
+            rotateAnimation: false,
+            mapInteractive: false,
+            callback: '',
+            onChapterEnter: [     
+                {
+                    layer: 'iv-elgon-chepkitale',
+                    opacity: 0
+                },   
+                {
+                    layer: 'v-elgon-national-park',
+                    opacity: 0.5
+                },    
+                {
+                    layer: 'elgon-ancestral-lands-outline',
                     opacity: 1
-                },                    
+                },          
                 {
                     layer: 'vi-elgon-chepyuk',
                     opacity: 0.5
@@ -441,7 +491,15 @@ var config = {
                 {
                     layer: 'vii-elgon-game-reserve',
                     opacity: 0.5
-                },                         
+                },               
+                {
+                    layer: 'viii-shamba',
+                    opacity: 0.5
+                },       
+                {
+                    layer: 'ix-extent',
+                    opacity: 1
+                },                          
             ],
             onChapterExit: []
         },
