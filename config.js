@@ -105,7 +105,7 @@ var config = {
             title: 'Evictions from the "white highlands" (1895-1932)',
             image: 'images/white.png',
             caption: 'Source: White highlands (Meier zu Selhausen, Frederick, & de Haas, 2016)',
-            description: 'Evictions of Ogiek on the eastern side of their territory started in the 1920s under the British colonial government. They were evicted and pushed higher up the mountain to make way for the White Highlands’“White Highlands”, settlements of Europeans attracted by good soils and the cool climate.',
+            description: 'Evictions of Ogiek on the eastern side of their territory started in the 1920s under the British colonial government. They were evicted and pushed higher up the mountain to make way for the “White Highlands”, settlements of Europeans attracted by good soils and the cool climate.',
             legend: '<span id="block"><hr style="border: 0; border-bottom: 3px dashed #f57729;"></span><span id="text">Extent of Ogiek ancestral lands</span><br><span id="block" style="background-color: #f78d4b; opacity: 0.5;"></span><span id="text">Occupied Ogiek lands</span><br><span id="block" style="background-color: #989090; border: 1px solid #c5c5c5; opacity: 0.5;"></span><span id="text">White Highlands</span><br>',
             location: {
                 center: [34.58435, 1.00483],
