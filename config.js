@@ -1,6 +1,6 @@
 var config = {
     style: 'mapbox://styles/dd-mapeo/cl58rt3tr002b15qpvor4vm1o',
-    accessToken: 'pk.eyJ1IjoiZGQtbWFwZW8iLCJhIjoiY2tuaGtxN2hjMjg5YTJ1b29kb3k4a3hwMCJ9.Q4cR8vp-Z6pP9PTUswy7Vw',
+    accessToken: 'pk.eyJ1IjoiZGQtbWFwZW8iLCJhIjoiY21weWcwdzRwMDZkbjJ0bjM4cmNhdjd6eCJ9.vdt_KcNoIKZdX2zYJMel7A',
     showMarkers: false,
     markerColor: '#3FB1CE',
     projection: 'equirectangular',
