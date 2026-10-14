@@ -121,22 +121,28 @@
         margin-top: 0.85rem;
       }
 
-      #header p#terrain-tip {
+      #header p.header-note {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.65rem;
-        margin-top: 0.75rem;
+        gap: 0.7rem;
+        margin-top: 0.7rem;
         font-size: 0.82rem;
         line-height: 1.35;
         font-style: italic;
         text-align: left;
       }
 
-      #terrain-tip svg {
+      #header p.header-note svg,
+      #header p.header-note img {
         flex: none;
-        width: 1.85rem;
-        height: 1.85rem;
+        width: 1.75rem;
+        height: 1.75rem;
+        object-fit: contain;
+      }
+
+      #header p.header-note img {
+        width: 2.65rem;
       }
 
       #footer {
@@ -270,16 +276,14 @@
         border-radius: 6px;
       }
 
-      #rotate-mobile {
+      #header p#rotate-mobile {
         display: none;
-        max-width: 100%;
       }
 
-      #rotate-mobile img {
-        display: block;
-        width: 2.5rem;
-        height: auto;
-        margin: 0.55rem auto 0;
+      @media (max-width: 750px) and (orientation: portrait) {
+        #header p#rotate-mobile {
+          display: flex;
+        }
       }
 
       .legend {
@@ -359,9 +363,10 @@
           margin-top: 0.5rem;
         }
 
-        #header p#terrain-tip {
-          margin-top: 0.5rem;
-          font-size: 0.78rem;
+        #header p.header-note {
+          gap: 0.6rem;
+          margin-top: 0.65rem;
+          font-size: 0.8rem;
         }
 
         .step div {
@@ -375,13 +380,6 @@
         #footer {
           width: min(22.5rem, calc(100% - 1.25rem));
           margin: 0 auto 12vh;
-        }
-
-        #rotate-mobile {
-          display: block;
-          margin-top: 0.7rem;
-          font-size: 0.8rem;
-          line-height: 1.35;
         }
 
         .legend {
@@ -409,7 +407,8 @@
         width: 2.4rem;
         margin-left: -1.2rem;
         pointer-events: none;
-        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
+        filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.95))
+          drop-shadow(0 1px 2px rgba(255, 255, 255, 0.7));
         animation: scroll-cue 1.5s ease-in-out infinite;
       }
 
@@ -461,7 +460,7 @@
         <path
           d="M5 8.5 12 15.5 19 8.5"
           fill="none"
-          stroke="#fff"
+          stroke="#242424"
           stroke-width="2.25"
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -611,6 +610,7 @@
 
         var terrainTip = document.createElement("p");
         terrainTip.id = "terrain-tip";
+        terrainTip.className = "header-note";
         terrainTip.innerHTML =
           '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" aria-hidden="true"><rect x="1.25" y="1.25" width="26.5" height="26.5" rx="4" fill="none" stroke="#fff" stroke-width="1.75"/><path fill="#fff" transform="translate(3.5 3.5)" d="m1.754 13.406 4.453-4.851 3.09 3.09 3.281 3.277.969-.969-3.309-3.312 3.844-4.121 6.148 6.886h1.082v-.855l-7.207-8.07-4.84 5.187L6.169 6.57l-5.48 5.965v.871ZM.688 16.844h20.625v1.375H.688Z"/></svg>Note: Click the button in the top-right corner to view the mountain in 3D.';
         header.appendChild(terrainTip);
@@ -720,10 +720,10 @@
           footer.appendChild(footerBookmarks);
         }
 
-        // add prefix content for mobile view
-        if (config.mobileview) {
-          header.insertAdjacentHTML("beforeend", config.mobileview);
-        }
+        header.insertAdjacentHTML(
+          "beforeend",
+          '<p id="rotate-mobile" class="header-note"><img src="images/device.png" alt="">For optimal viewing of this storytelling map on mobile, rotate your device to a horizontal orientation.</p>',
+        );
 
         if (config.footer) {
           var footerText = document.createElement("p");
