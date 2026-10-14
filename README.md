@@ -17,7 +17,7 @@ Change the writing in `story-text.js`, between the backticks. Keep the chapters 
 - Each chapter is a heading, then the photo, then the caption, then the text.
 - The text under the line of dashes at the end is the footer.
 - Write a link as `[Awana Digital](https://awana.digital/)`.
-- A YouTube link on its own line becomes a link.
+- A YouTube link on its own line becomes a titled video link.
 
 Photos go in `images/`. Point at them from `story-text.js`, for example `![](images/elgon-road.jpg)`.
 

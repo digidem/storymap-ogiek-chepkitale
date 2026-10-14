@@ -95,10 +95,15 @@ function blockToHtml(block) {
   const video = text.match(
     /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})\S*$/,
   );
-  if (video) {
-    const href = /^https?:\/\//i.test(text) ? text : `https://${text}`;
-    return `<a href="${escapeHtml(href)}" target="_blank">${escapeHtml(href)}</a>`;
-  }
+    if (video) {
+      const href = /^https?:\/\//i.test(text) ? text : `https://${text}`;
+      const id = href.match(/[?&]v=([\w-]{11})/)?.[1];
+      const title =
+        id === "nG_LjkWNY1E"
+          ? 'Video: "The Ogiek Story: Community-led conservation in Mount Elgon, Kenya" (Rights and Resources Institute)'
+          : "Watch on YouTube";
+      return `<a class="video-link" href="${escapeHtml(href)}" target="_blank"><svg viewBox="0 0 24 17" aria-hidden="true"><path fill="#ff0033" d="M23.5 2.6A3 3 0 0 0 21.4.5C19.5 0 12 0 12 0S4.5 0 2.6.5A3 3 0 0 0 .5 2.6 32 32 0 0 0 0 8.5a32 32 0 0 0 .5 5.9 3 3 0 0 0 2.1 2.1C4.5 17 12 17 12 17s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1 32 32 0 0 0 .5-5.9 32 32 0 0 0-.5-5.9z"/><path fill="#fff" d="M9.6 12.1V4.9l6.3 3.6z"/></svg><span>${escapeHtml(title)}</span></a>`;
+    }
   return inlineMarkdown(text);
 }
 
