@@ -322,7 +322,9 @@
     <script src="./sources.js"></script>
     <script src="https://unpkg.com/polygon-clipping@0.15.7/dist/polygon-clipping.umd.js"></script>
     <script src="./layers.js"></script>
+    <script src="./story.js"></script>
     <script>
+      applyStory(config).then(function () {
       var initLoad = true;
       var layerTypes = {
         fill: ["fill-opacity"],
@@ -830,6 +832,7 @@
 
       // setup resize event
       window.addEventListener("resize", scroller.resize);
+      });
     </script>
   </body>
 </html>
