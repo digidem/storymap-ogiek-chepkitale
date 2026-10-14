@@ -1,17 +1,12 @@
 var config = {
-  style: "mapbox://styles/dd-mapeo/cl58rt3tr002b15qpvor4vm1o",
-  accessToken:
-    "pk.eyJ1IjoiZGQtbWFwZW8iLCJhIjoiY21weWcwdzRwMDZkbjJ0bjM4cmNhdjd6eCJ9.vdt_KcNoIKZdX2zYJMel7A",
+  // OpenFreeMap Liberty: vector basemap, no API key. https://openfreemap.org/
+  style: "https://tiles.openfreemap.org/styles/liberty",
   showMarkers: false,
   markerColor: "#3FB1CE",
-  projection: "equirectangular",
-  //Read more about available projections here
-  //https://docs.mapbox.com/mapbox-gl-js/example/projections/
   inset: false,
   legend: true, // if legend is set to true, inset will be disabled.
   theme: "dark",
   use3dTerrain: false, //set true for enabling 3D maps.
-  useCustomLayers: false, // set true to load storyLayers.external from layers.js
   bookmarks: false,
   chapterReturn: false,
   byline: "",

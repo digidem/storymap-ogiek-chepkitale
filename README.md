@@ -2,11 +2,9 @@
 
 A scroll-driven storytelling map documenting the dispossession of the ancestral lands of the Ogiek of Mount Elgon, Kenya.
 
-Built with [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/) and [Scrollama](https://github.com/russellsamora/scrollama).
+Built with [MapLibre GL JS](https://maplibre.org/) and [Scrollama](https://github.com/russellsamora/scrollama). The basemap is [OpenFreeMap Liberty](https://openfreemap.org/), a free vector style. Hillshade from [Mapterhorn](https://mapterhorn.com/attribution) is drawn over the land so the mountain relief shows through the story polygons. It sits under the water, roads, and labels. This is separate from `use3dTerrain` in `config.js`, which is off and would raise the map into 3D.
 
 ## Setup
-
-The Mapbox access token lives in `config.js`. Replace it with your own if needed.
 
 Open the map through a local server. Loading `index.html` as a file will not show the map or the video.
 
@@ -36,7 +34,7 @@ Photos go in `images/`. Point at them from `story.md`, for example `![](images/e
 ## Config
 
 - `story.md` – title, subtitle, logo, footer, and each chapter's title, photo, caption, and text.
-- `config.js` – access token, and for each chapter the map position and which layers turn on.
-- `layers.js` – how features in `layers.geojson` are drawn, and their colors. Layer ids here match `config.js`. Optional extra vector layers live here too, and stay off unless `useCustomLayers` is true in `config.js`.
+- `config.js` – basemap style, and for each chapter the map position and which layers turn on.
+- `layers.js` – how features in `layers.geojson` are drawn, and their colors. Layer ids here match `config.js`.
 - `layers.geojson` – the feature shapes used in the story map.
-- `index.html` – page layout and scroll behavior.
+- `index.html` – page layout, scroll behavior, and the hillshade layer.

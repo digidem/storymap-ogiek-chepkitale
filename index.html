@@ -37,9 +37,8 @@
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v3.33.0/mapbox-gl.js"></script>
     <link
-      href="https://api.tiles.mapbox.com/mapbox-gl-js/v3.33.0/mapbox-gl.css"
+      href="https://unpkg.com/maplibre-gl@6.14.0/dist/maplibre-gl.css"
       rel="stylesheet"
     />
     <script src="https://unpkg.com/intersection-observer@0.12.0/intersection-observer.js"></script>
@@ -206,7 +205,7 @@
       .legend {
         position: fixed;
         right: 30px;
-        bottom: 30px;
+        bottom: 58px;
         color: #444;
         background-color: #fafafa;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -242,11 +241,11 @@
         vertical-align: top;
       }
 
-      .mapboxgl-ctrl {
+      .maplibregl-ctrl {
         margin-right: 30px !important;
       }
 
-      .mapboxgl-popup {
+      .maplibregl-popup {
         font:
           12px/20px "Montserrat",
           Helvetica,
@@ -306,9 +305,9 @@
       }
 
       /* Fix issue on mobile browser where scroll breaks  */
-      .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan,
-      .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan
-        .mapboxgl-canvas {
+      .maplibregl-canvas-container.maplibregl-touch-zoom-rotate.maplibregl-touch-drag-pan,
+      .maplibregl-canvas-container.maplibregl-touch-zoom-rotate.maplibregl-touch-drag-pan
+        .maplibregl-canvas {
         touch-action: unset;
       }
     </style>
@@ -322,7 +321,9 @@
     <script src="https://unpkg.com/polygon-clipping@0.15.7/dist/polygon-clipping.umd.js"></script>
     <script src="./layers.js"></script>
     <script src="./story.js"></script>
-    <script>
+    <script type="module">
+      import * as maplibregl from "https://unpkg.com/maplibre-gl@6.14.0/dist/maplibre-gl.mjs";
+
       applyStory(config).then(function () {
       var initLoad = true;
       var layerTypes = {
@@ -361,10 +362,10 @@
       }
 
       // add navigation control for interactive chapters
-      const navigation = new mapboxgl.NavigationControl();
+      const navigation = new maplibregl.NavigationControl();
 
       // add custom hover popups for interactive chapters
-      const popup = new mapboxgl.Popup({
+      const popup = new maplibregl.Popup({
         closeButton: false,
         closeOnClick: false,
       });
@@ -445,7 +446,7 @@
 
         // add image caption to chapters if found in config
         if (record.caption) {
-          caption = document.createElement("p");
+          var caption = document.createElement("p");
           caption.setAttribute("class", "caption");
           caption.innerHTML = `<em>${record.caption}</em>`;
           chapter.appendChild(caption);
@@ -458,7 +459,7 @@
 
           // add author to chapters if found in config
           if (record.author) {
-            author = document.createElement("p");
+            var author = document.createElement("p");
             author.innerHTML = "<strong>By " + record.author + "</strong>";
             chapter.appendChild(author);
           }
@@ -510,7 +511,7 @@
       // add bookmarks for chapters with title, append to header and footer
       if (config.bookmarks) {
         var bookmarksText = "<strong>Bookmarks</strong>: ";
-        for (i = 0; i < config.chapters.length; i++) {
+        for (var i = 0; i < config.chapters.length; i++) {
           if (config.chapters[i].title) {
             bookmarksText += `<a href=#${config.chapters[i].id}>${config.chapters[i].title}</a>`;
             if (i != config.chapters.length - 1) {
@@ -545,28 +546,13 @@
         story.appendChild(footer);
       }
 
-      mapboxgl.accessToken = config.accessToken;
-
-      const transformRequest = (url) => {
-        const hasQuery = url.indexOf("?") !== -1;
-        const suffix = hasQuery
-          ? "&pluginName=scrollytellingV2"
-          : "?pluginName=scrollytellingV2";
-        return {
-          url: url + suffix,
-        };
-      };
-
-      var map = new mapboxgl.Map({
+      var map = new maplibregl.Map({
         container: "map",
         style: config.style,
         center: config.chapters[0].location.center,
         zoom: config.chapters[0].location.zoom,
         bearing: config.chapters[0].location.bearing,
         pitch: config.chapters[0].location.pitch,
-        transformRequest: transformRequest,
-        // set custom projection
-        projection: config.projection,
         // make storymap partially interactive
         interactive: true,
         dragPan: false,
@@ -578,23 +564,20 @@
 
       // Create a inset map if enabled in config.js
       if (config.inset && !config.legend) {
-        var insetMap = new mapboxgl.Map({
+        var insetMap = new maplibregl.Map({
           container: "mapInset", // container id
-          style: "mapbox://styles/mapbox/dark-v10", //hosted style id
+          style: "https://tiles.openfreemap.org/styles/dark",
           center: config.chapters[0].location.center,
           // Hardcode above center value if you want insetMap to be static.
           zoom: 3, // starting zoom
           hash: false,
           interactive: false,
           attributionControl: false,
-          //Future: Once official mapbox-gl-js has globe view enabled,
-          //insetmap can be a globe with the following parameter.
-          //projection: 'globe'
         });
       }
 
       if (config.showMarkers) {
-        var marker = new mapboxgl.Marker({ color: config.markerColor });
+        var marker = new maplibregl.Marker({ color: config.markerColor });
         marker.setLngLat(config.chapters[0].location.center).addTo(map);
       }
 
@@ -603,24 +586,90 @@
 
       function firstLabelLayerId() {
         const layers = map.getStyle().layers;
-        const contour = layers.find((layer) => layer.id === "contour-label");
-        if (contour) return contour.id;
+        const preferred = ["contour-label", "waterway_line_label"];
+        for (const id of preferred) {
+          if (layers.some((layer) => layer.id === id)) return id;
+        }
         const label = layers.find(
-          (layer) => layer.type === "symbol" && layer.id.endsWith("-label"),
+          (layer) =>
+            layer.type === "symbol" &&
+            (layer.id.endsWith("-label") ||
+              layer.id.endsWith("_label") ||
+              layer.id.startsWith("label_")),
         );
         return label && label.id;
       }
 
+      function addHillshade(map) {
+        if (map.getSource("hillshade-dem")) return;
+        map.addSource("hillshade-dem", {
+          type: "raster-dem",
+          url: "https://tiles.mapterhorn.com/tilejson.json",
+          maxzoom: 12,
+        });
+        const beforeId = [
+          "waterway_tunnel",
+          "water",
+          "tunnel_motorway_link_casing",
+        ].find((id) => map.getLayer(id));
+        map.addLayer(
+          {
+            id: "hillshade",
+            type: "hillshade",
+            source: "hillshade-dem",
+            paint: {
+              "hillshade-method": "standard",
+              "hillshade-illumination-direction": 315,
+              "hillshade-shadow-color": "#473B24",
+              "hillshade-highlight-color": "#ffffff",
+              "hillshade-accent-color": "#473B24",
+              "hillshade-exaggeration": 0.5,
+            },
+          },
+          beforeId,
+        );
+      }
+
+      function addElgonPeak(map) {
+        if (map.hasImage("elgon-peak")) return;
+        const ratio = 2;
+        const width = 40;
+        const height = 32;
+        const canvas = document.createElement("canvas");
+        canvas.width = width * ratio;
+        canvas.height = height * ratio;
+        const ctx = canvas.getContext("2d");
+        ctx.scale(ratio, ratio);
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(3, 28);
+        ctx.lineTo(14, 11);
+        ctx.lineTo(18, 17);
+        ctx.lineTo(27, 4);
+        ctx.lineTo(37, 28);
+        ctx.closePath();
+        ctx.lineWidth = 4.5;
+        ctx.strokeStyle = "#fff";
+        ctx.stroke();
+        ctx.fillStyle = "#6b4632";
+        ctx.fill();
+        map.addImage(
+          "elgon-peak",
+          ctx.getImageData(0, 0, canvas.width, canvas.height),
+          { pixelRatio: ratio },
+        );
+      }
+
       map.on("load", async function () {
+        addHillshade(map);
         if (config.use3dTerrain) {
-          map.addSource("mapbox-dem", {
+          map.addSource("terrain-dem", {
             type: "raster-dem",
-            url: "mapbox://mapbox.mapbox-terrain-dem-v1",
-            tileSize: 512,
-            maxzoom: 14,
+            url: "https://tiles.mapterhorn.com/tilejson.json",
           });
           // add the DEM source as a terrain layer with exaggerated height
-          map.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 });
+          map.setTerrain({ source: "terrain-dem", exaggeration: 1.5 });
 
           // add a sky layer that will show when the map is highly pitched
           map.addLayer({
@@ -635,24 +684,15 @@
         }
 
         const storyData = await fetch(storyLayers.url).then((response) => response.json());
+        addElgonPeak(map);
         const labelLayerId = firstLabelLayerId();
         storyLayers.toMapLayers(storyData).forEach((layer) => {
           if (map.getLayer(layer.id)) map.removeLayer(layer.id);
           // Keep the mountain label above the basemap. Fills and lines sit
-          // under contour-label, which is the start of the label stack.
+          // under the first place-name layer.
           const beforeId = layer.type === "symbol" ? undefined : labelLayerId;
           map.addLayer(layer, beforeId);
         });
-
-        // add custom layers
-        if (config.useCustomLayers) {
-          for (const source of storyLayers.external.sources) {
-            map.addSource(source.name, { type: source.type, url: source.url });
-          }
-          for (const layer of storyLayers.external.layers) {
-            map.addLayer(layer, "your-layer");
-          }
-        }
 
         // As the map moves, grab and update bounds in inset map.
         if (config.inset && !config.legend) {
@@ -672,7 +712,7 @@
             );
 
             // add legend to each chapter
-            for (i = 0; i < config.chapters.length; i++) {
+            for (var i = 0; i < config.chapters.length; i++) {
               if (config.chapters[i].legend != undefined) {
                 if (config.chapters[i].id == response.element.id) {
                   document.getElementById(
@@ -760,6 +800,8 @@
       //Helper functions for insetmap
       function getInsetBounds() {
         let bounds = map.getBounds();
+        let sw = bounds.getSouthWest();
+        let ne = bounds.getNorthEast();
 
         let boundsJson = {
           type: "FeatureCollection",
@@ -771,11 +813,11 @@
                 type: "Polygon",
                 coordinates: [
                   [
-                    [bounds._sw.lng, bounds._sw.lat],
-                    [bounds._ne.lng, bounds._sw.lat],
-                    [bounds._ne.lng, bounds._ne.lat],
-                    [bounds._sw.lng, bounds._ne.lat],
-                    [bounds._sw.lng, bounds._sw.lat],
+                    [sw.lng, sw.lat],
+                    [ne.lng, sw.lat],
+                    [ne.lng, ne.lat],
+                    [sw.lng, ne.lat],
+                    [sw.lng, sw.lat],
                   ],
                 ],
               },
