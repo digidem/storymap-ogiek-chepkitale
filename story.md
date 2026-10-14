@@ -39,7 +39,7 @@ Evictions of Ogiek on the eastern side of their territory started in the 1920s u
 
 ![](images/gazette.jpg)
 
-From colonial times communities in East Africa have faced exclusionary measures guided by modern conservationist thought. Along these lines, in the 1930s, Mount Elgon was gazetted as Crown Forest Reserve, and the Ogiek were denied the legal right to occupy and manage their lands. After independence, the management and  the forest reserves were transferred to the Kenya Forestry Service (KFS), who controls the forest reserves at Mount Elgon to this day.
+From colonial times communities in East Africa have faced exclusionary measures guided by modern conservationist thought. Along these lines, in the 1930s, Mount Elgon was gazetted as Crown Forest Reserve, and the Ogiek were denied the legal right to occupy and manage their lands. After independence, the management and the forest reserves were transferred to the Kenya Forestry Service (KFS), who controls the forest reserves at Mount Elgon to this day.
 
 ## The degazettement of Chepkitale (1938)
 
@@ -95,4 +95,4 @@ Learn more about CIPDP at [https://chepkitale.org](https://chepkitale.org)
 
 ---
 
-Story map by [Awana Digital](https://awana.digital/) and [Conservation Metrics](https://conservationmetrics.com/).
+Story map by [Chepkitale Indigenous Peoples Development Project](https://chepkitale.org/), [Forest Peoples Programme](https://forestpeoples.org/), [Awana Digital](https://awana.digital/) and [Conservation Metrics](https://conservationmetrics.com/).
