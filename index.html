@@ -121,6 +121,24 @@
         margin-top: 0.85rem;
       }
 
+      #header p#terrain-tip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        margin-top: 0.75rem;
+        font-size: 0.82rem;
+        line-height: 1.35;
+        font-style: italic;
+        text-align: left;
+      }
+
+      #terrain-tip svg {
+        flex: none;
+        width: 1.85rem;
+        height: 1.85rem;
+      }
+
       #footer {
         box-sizing: border-box;
         width: min(22.5rem, calc(100% - 2rem));
@@ -341,6 +359,11 @@
           margin-top: 0.5rem;
         }
 
+        #header p#terrain-tip {
+          margin-top: 0.5rem;
+          font-size: 0.78rem;
+        }
+
         .step div {
           padding: 0.9rem 0.95rem 0.8rem;
         }
@@ -378,6 +401,48 @@
         }
       }
 
+      #scroll-cue {
+        position: fixed;
+        left: 50%;
+        bottom: max(1.35rem, env(safe-area-inset-bottom));
+        z-index: 6;
+        width: 2.4rem;
+        margin-left: -1.2rem;
+        pointer-events: none;
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
+        animation: scroll-cue 1.5s ease-in-out infinite;
+      }
+
+      #scroll-cue.is-gone {
+        animation: scroll-cue-out 0.35s ease forwards;
+      }
+
+      @keyframes scroll-cue {
+        0%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.4;
+        }
+        50% {
+          transform: translateY(0.55rem);
+          opacity: 1;
+        }
+      }
+
+      @keyframes scroll-cue-out {
+        to {
+          opacity: 0;
+          transform: translateY(0.7rem);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #scroll-cue {
+          animation: none;
+          opacity: 0.9;
+        }
+      }
+
       /* Fix issue on mobile browser where scroll breaks  */
       .maplibregl-canvas-container.maplibregl-touch-zoom-rotate.maplibregl-touch-drag-pan,
       .maplibregl-canvas-container.maplibregl-touch-zoom-rotate.maplibregl-touch-drag-pan
@@ -391,6 +456,33 @@
     <div id="map"></div>
     <div id="mapInset"></div>
     <div id="story"></div>
+    <div id="scroll-cue" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path
+          d="M5 8.5 12 15.5 19 8.5"
+          fill="none"
+          stroke="#fff"
+          stroke-width="2.25"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+    <script>
+      (function () {
+        var cue = document.getElementById("scroll-cue");
+        if (!cue) return;
+        function hide() {
+          if (cue.classList.contains("is-gone")) return;
+          cue.classList.add("is-gone");
+          cue.addEventListener("animationend", function () {
+            cue.remove();
+          });
+        }
+        if (window.scrollY > 8) hide();
+        else window.addEventListener("scroll", hide, { once: true, passive: true });
+      })();
+    </script>
     <script src="./config.js"></script>
     <script src="https://unpkg.com/polygon-clipping@0.15.7/dist/polygon-clipping.umd.js"></script>
     <script src="./layers.js"></script>
@@ -516,6 +608,12 @@
           image.src = config.logo;
           header.appendChild(image);
         }
+
+        var terrainTip = document.createElement("p");
+        terrainTip.id = "terrain-tip";
+        terrainTip.innerHTML =
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" aria-hidden="true"><rect x="1.25" y="1.25" width="26.5" height="26.5" rx="4" fill="none" stroke="#fff" stroke-width="1.75"/><path fill="#fff" transform="translate(3.5 3.5)" d="m1.754 13.406 4.453-4.851 3.09 3.09 3.281 3.277.969-.969-3.309-3.312 3.844-4.121 6.148 6.886h1.082v-.855l-7.207-8.07-4.84 5.187L6.169 6.57l-5.48 5.965v.871ZM.688 16.844h20.625v1.375H.688Z"/></svg>Note: Click the button in the top-right corner to view the mountain in 3D.';
+        header.appendChild(terrainTip);
 
         if (header.innerText.length > 0) {
           header.classList.add(config.theme);
