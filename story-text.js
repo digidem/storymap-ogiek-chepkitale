@@ -1,11 +1,12 @@
-<!--
+// Edit the markdown between the backticks. Keep chapters in the same order as config.js.
+var storySource = `<!--
 Edit this file to change the story text.
 The first heading is the map title. The line under it is the subtitle.
 The image under the subtitle is the logo.
 Each chapter starts with a heading, then the photo, then the caption, then the text.
 Leave the chapters in this order.
 The text under the last line of dashes is the footer.
-A YouTube link on its own line becomes a video.
+A YouTube link on its own line becomes a link.
 -->
 
 # Dispossession of the Ancestral Lands of the Ogiek of Mount Elgon in Kenya
@@ -96,3 +97,4 @@ Learn more about CIPDP at [https://chepkitale.org](https://chepkitale.org)
 ---
 
 Story map by [Chepkitale Indigenous Peoples Development Project](https://chepkitale.org/), [Forest Peoples Programme](https://forestpeoples.org/), [Awana Digital](https://awana.digital/) and [Conservation Metrics](https://conservationmetrics.com/).
+`;

@@ -6,35 +6,25 @@ Built with [MapLibre GL JS](https://maplibre.org/) and [Scrollama](https://githu
 
 ## Setup
 
-Open the map through a local server. Loading `index.html` as a file will not show the map or the video.
-
-```bash
-$ python -m http.server 8080
-
-# Or you can use
-
-$ npx serve .
-```
-
-Then open http://localhost:8080. Stop the server with Ctrl+C.
+Open `index.html` in a browser. The page does not need a local server.
 
 ## Editing the story
 
-Change the writing in `story.md`. Keep the chapters in the same order as `config.js`.
+Change the writing in `story-text.js`, between the backticks. Keep the chapters in the same order as `config.js`.
 
 - The first heading is the map title. The line under it is the subtitle.
 - The image under the subtitle is the logo.
 - Each chapter is a heading, then the photo, then the caption, then the text.
 - The text under the line of dashes at the end is the footer.
 - Write a link as `[Awana Digital](https://awana.digital/)`.
-- A YouTube link on its own line becomes a video.
+- A YouTube link on its own line becomes a link.
 
-Photos go in `images/`. Point at them from `story.md`, for example `![](images/elgon-road.jpg)`.
+Photos go in `images/`. Point at them from `story-text.js`, for example `![](images/elgon-road.jpg)`.
 
 ## Config
 
-- `story.md` – title, subtitle, logo, footer, and each chapter's title, photo, caption, and text.
+- `story-text.js` – title, subtitle, logo, footer, and each chapter's title, photo, caption, and text.
 - `config.js` – basemap style, and for each chapter the map position and which layers turn on.
-- `layers.js` – how features in `layers.geojson` are drawn, and their colors. Layer ids here match `config.js`.
-- `layers.geojson` – the feature shapes used in the story map.
+- `layers.js` – how features in `layers-data.js` are drawn, and their colors. Layer ids here match `config.js`.
+- `layers-data.js` – the feature shapes used in the story map.
 - `index.html` – page layout, scroll behavior, and the hillshade layer.

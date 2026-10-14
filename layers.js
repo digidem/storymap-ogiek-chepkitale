@@ -1,4 +1,4 @@
-// Story layers from layers.geojson. `id` matches config.js so chapter opacity
+// Story layers from layers-data.js. `id` matches config.js so chapter opacity
 // toggles stay put. `names` draws those features. `exclude` draws every land
 // polygon except the listed names. `current_extent` is not a land polygon; it
 // is only the dashed line on ix-extent. Points are included only when named.
@@ -6,7 +6,6 @@
 // Fill layers that include more than one polygon are dissolved so a 0.5 opacity
 // does not stack where they overlap.
 var storyLayers = {
-  url: "./layers.geojson",
   layers: [
     {
       id: "i-elgon-ancestral-lands",

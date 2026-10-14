@@ -1,13 +1,11 @@
-// Loads story.md and copies the title, subtitle, logo, footer, and each
-// chapter's title, image, caption, and description onto config.
+// Copies the title, subtitle, logo, footer, and each chapter's title, image,
+// caption, and description from story-text.js onto config.
 // Map settings stay in config.js.
 async function applyStory(config) {
-  const response = await fetch("./story.md");
-  if (!response.ok) throw new Error("Could not load story.md");
-  const story = parseStory(await response.text());
+  const story = parseStory(storySource);
   if (story.chapters.length !== config.chapters.length) {
     throw new Error(
-      `story.md has ${story.chapters.length} chapters and config.js has ${config.chapters.length}. Keep them in the same order.`,
+      `story-text.js has ${story.chapters.length} chapters and config.js has ${config.chapters.length}. Keep them in the same order.`,
     );
   }
   config.title = story.title;
@@ -98,8 +96,8 @@ function blockToHtml(block) {
     /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})\S*$/,
   );
   if (video) {
-    const src = `https://www.youtube-nocookie.com/embed/${video[1]}?controls=0`;
-    return `<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="${src}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="fullscreen; picture-in-picture"></iframe></div>`;
+    const href = /^https?:\/\//i.test(text) ? text : `https://${text}`;
+    return `<a href="${escapeHtml(href)}" target="_blank">${escapeHtml(href)}</a>`;
   }
   return inlineMarkdown(text);
 }

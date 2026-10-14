@@ -483,13 +483,38 @@
       })();
     </script>
     <script src="./config.js"></script>
+    <script src="./story-text.js"></script>
     <script src="https://unpkg.com/polygon-clipping@0.15.7/dist/polygon-clipping.umd.js"></script>
+    <script src="./layers-data.js"></script>
     <script src="./layers.js"></script>
     <script src="./story.js"></script>
     <script type="module">
       import * as maplibregl from "https://unpkg.com/maplibre-gl@6.14.0/dist/maplibre-gl.mjs";
 
-      applyStory(config).then(function () {
+      // A file page cannot start MapLibre's module worker. Run that same
+      // worker as a classic blob worker, which the browser allows here.
+      function useClassicMapWorker() {
+        return fetch(
+          "https://cdn.jsdelivr.net/npm/maplibre-gl@6.14.0/dist/maplibre-gl-worker.mjs",
+        )
+          .then((response) => {
+            if (!response.ok) throw new Error("Could not load the map worker");
+            return response.text();
+          })
+          .then((source) => {
+            const classic = source.replace(/export\{[^}]*\};/, "");
+            const url = URL.createObjectURL(
+              new Blob([classic], { type: "text/javascript" }),
+            );
+            const NativeWorker = window.Worker;
+            window.Worker = function (scriptUrl, options) {
+              if (options && options.type === "module") return new NativeWorker(url);
+              return new NativeWorker(scriptUrl, options);
+            };
+          });
+      }
+
+      useClassicMapWorker().then(() => applyStory(config)).then(function () {
         var initLoad = true;
         var layerTypes = {
           fill: ["fill-opacity"],
@@ -773,6 +798,41 @@
           marker.setLngLat(config.chapters[0].location.center).addTo(map);
         }
 
+        const elgonLngLat = [34.554287440101838, 1.147761326234537];
+
+        // The title card covers the middle of the opening view. Shift that
+        // camera so the Mount Elgon label lands in the open map below it.
+        function centerBelowHeader(lngLat, zoom) {
+          const header = document.getElementById("header");
+          if (!header) return null;
+          const headerBottom =
+            Number.parseFloat(getComputedStyle(header).marginTop) +
+            header.offsetHeight;
+          const targetY = headerBottom + 56;
+          const zoomScale = 2 ** (zoom - map.getZoom());
+          const point = map.project(lngLat);
+          const center = map.project(map.getCenter());
+          const predictedY = center.y + (point.y - center.y) * zoomScale;
+          return map.unproject([
+            center.x,
+            center.y - (targetY - predictedY) / zoomScale,
+          ]);
+        }
+
+        function chapterCamera(chapter) {
+          const location = map.getTerrain()
+            ? {
+                ...chapter.location,
+                pitch: Math.max(chapter.location.pitch || 0, 60),
+              }
+            : { ...chapter.location };
+          if (chapter === config.chapters[0]) {
+            const center = centerBelowHeader(elgonLngLat, location.zoom);
+            if (center) location.center = center;
+          }
+          return location;
+        }
+
         // instantiate the scrollama
         var scroller = scrollama();
 
@@ -881,7 +941,12 @@
           );
         }
 
-        map.on("load", async function () {
+        map.on("load", function () {
+          const opening = centerBelowHeader(
+            elgonLngLat,
+            config.chapters[0].location.zoom,
+          );
+          if (opening) map.jumpTo({ center: opening });
           addHillshade(map);
           addTerrainSource(map);
           if (config.use3dTerrain) {
@@ -903,12 +968,9 @@
             });
           });
 
-          const storyData = await fetch(storyLayers.url).then((response) =>
-            response.json(),
-          );
           addElgonPeak(map);
           const labelLayerId = firstLabelLayerId();
-          storyLayers.toMapLayers(storyData).forEach((layer) => {
+          storyLayers.toMapLayers(storyLayerData).forEach((layer) => {
             if (map.getLayer(layer.id)) map.removeLayer(layer.id);
             // Keep the mountain label above the basemap. Fills and lines sit
             // under the first place-name layer.
@@ -949,12 +1011,7 @@
               }
 
               response.element.classList.add("active");
-              const location = map.getTerrain()
-                ? {
-                    ...chapter.location,
-                    pitch: Math.max(chapter.location.pitch || 0, 60),
-                  }
-                : chapter.location;
+              const location = chapterCamera(chapter);
               map[chapter.mapAnimation || "flyTo"](location);
               // Incase you do not want to have a dynamic inset map,
               // rather want to keep it a static view but still change the
