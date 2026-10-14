@@ -37,7 +37,6 @@ Photos go in `images/`. Point at them from `story.md`, for example `![](images/e
 
 - `story.md` – title, subtitle, logo, footer, and each chapter's title, photo, caption, and text.
 - `config.js` – access token, and for each chapter the map position and which layers turn on.
-- `layers.js` – how features in `layers.geojson` are drawn, and their colors. Layer ids here match `config.js`.
+- `layers.js` – how features in `layers.geojson` are drawn, and their colors. Layer ids here match `config.js`. Optional extra vector layers live here too, and stay off unless `useCustomLayers` is true in `config.js`.
 - `layers.geojson` – the feature shapes used in the story map.
-- `sources.js` – optional extra vector layers, off unless `useCustomLayers` is true in `config.js`.
 - `index.html` – page layout and scroll behavior.

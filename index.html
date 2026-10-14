@@ -319,7 +319,6 @@
     <div id="mapInset"></div>
     <div id="story"></div>
     <script src="./config.js"></script>
-    <script src="./sources.js"></script>
     <script src="https://unpkg.com/polygon-clipping@0.15.7/dist/polygon-clipping.umd.js"></script>
     <script src="./layers.js"></script>
     <script src="./story.js"></script>
@@ -647,16 +646,11 @@
 
         // add custom layers
         if (config.useCustomLayers) {
-          for (i = 0; i < externalData.sources.length; i++) {
-            let currentSource = externalData.sources[i];
-            let sourceObj = {
-              type: currentSource.type,
-              url: currentSource.url,
-            };
-            map.addSource(currentSource.name, sourceObj);
+          for (const source of storyLayers.external.sources) {
+            map.addSource(source.name, { type: source.type, url: source.url });
           }
-          for (i = 0; i < externalData.layers.length; i++) {
-            map.addLayer(externalData.layers[i], "your-layer"); // arrange layers beneath this layer in your Studio map
+          for (const layer of storyLayers.external.layers) {
+            map.addLayer(layer, "your-layer");
           }
         }
 
