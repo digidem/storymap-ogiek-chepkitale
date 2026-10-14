@@ -11,7 +11,7 @@ var config = {
   chapterReturn: false,
   byline: "",
   mobileview:
-    '<div id="rotate-mobile"><em>For optimal viewing of this storytelling map on mobile, rotate your device to a horizontal orientation.</em><br><br><img src="images/device.png">', // to add custom messaging in the header for mobile devices
+    '<div id="rotate-mobile"><em>For optimal viewing of this storytelling map on mobile, rotate your device to a horizontal orientation.</em><img src="images/device.png" alt=""></div>', // to add custom messaging in the header for mobile devices
   chapters: [
     {
       id: "ch1",
