@@ -350,8 +350,14 @@
         margin-right: 30px !important;
       }
 
+      /* Above the story. The map is its own layer, so this has to leave that layer. */
       .maplibregl-ctrl-top-right {
-        z-index: 2;
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 7;
+        isolation: isolate;
+        transform: translateZ(0);
       }
 
       .maplibregl-popup {
@@ -761,6 +767,25 @@
           story.appendChild(footer);
         }
 
+        // #map is position:fixed, so a z-index inside it cannot rise above the story.
+        function liftTopRightControls(map) {
+          const parked = document.body.querySelector(
+            ":scope > .maplibregl-ctrl-top-right",
+          );
+          const inside = map
+            .getContainer()
+            .querySelector(".maplibregl-ctrl-top-right");
+          if (!inside) return;
+          if (!parked) {
+            document.body.appendChild(inside);
+            return;
+          }
+          if (inside !== parked) {
+            while (inside.firstChild) parked.appendChild(inside.firstChild);
+            inside.remove();
+          }
+        }
+
         var map = new maplibregl.Map({
           container: "map",
           style: config.style,
@@ -913,6 +938,7 @@
             new maplibregl.TerrainControl(terrainOptions),
             "top-right",
           );
+          liftTopRightControls(map);
           map.on("terrain", () => {
             const enabled = !!map.getTerrain();
             syncSky(map);
@@ -997,12 +1023,14 @@
               // set interactive properties for chapters set as mapInteractive = true
               if (chapter.mapInteractive) {
                 map.addControl(navigation);
+                liftTopRightControls(map);
                 map.dragPan.enable();
                 map.doubleClickZoom.enable();
                 map.getCanvas().style.cursor = "grab";
               } else {
                 if (map.hasControl(navigation)) {
                   map.removeControl(navigation);
+                  liftTopRightControls(map);
                 }
                 map.dragPan.disable();
                 map.doubleClickZoom.disable();
