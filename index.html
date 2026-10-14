@@ -320,6 +320,8 @@
     <div id="story"></div>
     <script src="./config.js"></script>
     <script src="./sources.js"></script>
+    <script src="https://unpkg.com/polygon-clipping@0.15.7/dist/polygon-clipping.umd.js"></script>
+    <script src="./layers.js"></script>
     <script>
       var initLoad = true;
       var layerTypes = {
@@ -598,7 +600,17 @@
       // instantiate the scrollama
       var scroller = scrollama();
 
-      map.on("load", function () {
+      function firstLabelLayerId() {
+        const layers = map.getStyle().layers;
+        const contour = layers.find((layer) => layer.id === "contour-label");
+        if (contour) return contour.id;
+        const label = layers.find(
+          (layer) => layer.type === "symbol" && layer.id.endsWith("-label"),
+        );
+        return label && label.id;
+      }
+
+      map.on("load", async function () {
         if (config.use3dTerrain) {
           map.addSource("mapbox-dem", {
             type: "raster-dem",
@@ -620,6 +632,16 @@
             },
           });
         }
+
+        const storyData = await fetch(storyLayers.url).then((response) => response.json());
+        const labelLayerId = firstLabelLayerId();
+        storyLayers.toMapLayers(storyData).forEach((layer) => {
+          if (map.getLayer(layer.id)) map.removeLayer(layer.id);
+          // Keep the mountain label above the basemap. Fills and lines sit
+          // under contour-label, which is the start of the label stack.
+          const beforeId = layer.type === "symbol" ? undefined : labelLayerId;
+          map.addLayer(layer, beforeId);
+        });
 
         // add custom layers
         if (config.useCustomLayers) {
