@@ -16,7 +16,7 @@ var config = {
       alignment: "left",
       hidden: false,
       location: {
-        center: [35, 0.27041],
+        center: [34.55, 1.13],
         zoom: 5,
         pitch: 0,
         bearing: 0,

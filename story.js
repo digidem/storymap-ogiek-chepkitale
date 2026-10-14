@@ -24,7 +24,10 @@ async function applyStory(config) {
 }
 
 function parseStory(markdown) {
-  const lines = markdown.replace(/<!--[\s\S]*?-->/g, "").trim().split(/\r?\n/);
+  const lines = markdown
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .trim()
+    .split(/\r?\n/);
   const story = { title: "", subtitle: "", logo: "", footer: "", chapters: [] };
   let chapter = null;
   let footer = null;
@@ -42,7 +45,12 @@ function parseStory(markdown) {
       continue;
     }
     if (line.startsWith("## ")) {
-      chapter = { title: line.slice(3).trim(), image: "", caption: "", body: [] };
+      chapter = {
+        title: line.slice(3).trim(),
+        image: "",
+        caption: "",
+        body: [],
+      };
       story.chapters.push(chapter);
       continue;
     }
@@ -94,12 +102,16 @@ function markdownToHtml(markdown) {
 
 function blockToHtml(block) {
   const text = block.trim().replace(/\s*\n\s*/g, " ");
-  const video = text.match(
-    /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})\S*$/,
-  );
-  if (video) {
-    const src = `https://www.youtube-nocookie.com/embed/${video[1]}?controls=0`;
-    return `<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="${src}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="fullscreen; picture-in-picture"></iframe></div>`;
+  const linked = text.match(/^\[([^\]]+)\]\(([^)\s]+)\)$/);
+  const href = linked ? linked[2] : text;
+  if (
+    /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}\S*$/.test(
+      href,
+    )
+  ) {
+    const url = /^https?:\/\//i.test(href) ? href : `https://${href}`;
+    const title = linked ? linked[1] : "Watch on YouTube";
+    return `<a class="video-link" href="${escapeHtml(url)}" target="_blank"><svg viewBox="0 0 24 17" aria-hidden="true"><path fill="#ff0033" d="M23.5 2.6A3 3 0 0 0 21.4.5C19.5 0 12 0 12 0S4.5 0 2.6.5A3 3 0 0 0 .5 2.6 32 32 0 0 0 0 8.5a32 32 0 0 0 .5 5.9 3 3 0 0 0 2.1 2.1C4.5 17 12 17 12 17s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1 32 32 0 0 0 .5-5.9 32 32 0 0 0-.5-5.9z"/><path fill="#fff" d="M9.6 12.1V4.9l6.3 3.6z"/></svg><span>${escapeHtml(title)}</span></a>`;
   }
   return inlineMarkdown(text);
 }

@@ -257,6 +257,26 @@
         margin: 0.7rem 0 0;
       }
 
+      a.video-link {
+        display: inline-flex;
+        align-items: flex-start;
+        gap: 0.55rem;
+        margin-top: 0.15rem;
+        text-decoration: none;
+      }
+
+      a.video-link svg {
+        flex: none;
+        width: 1.55rem;
+        height: 1.1rem;
+        margin-top: 0.2rem;
+      }
+
+      a.video-link span {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
       .step .caption {
         font-family: "Source Sans 3", "Segoe UI", sans-serif;
         font-size: 0.78rem;
@@ -479,7 +499,11 @@
           });
         }
         if (window.scrollY > 8) hide();
-        else window.addEventListener("scroll", hide, { once: true, passive: true });
+        else
+          window.addEventListener("scroll", hide, {
+            once: true,
+            passive: true,
+          });
       })();
     </script>
     <script src="./config.js"></script>
@@ -803,21 +827,17 @@
           });
         }
 
+        const terrainSky = {
+          "sky-color": "#88C6FC",
+          "horizon-color": "#d8e6f0",
+          "fog-color": "#c5d4e0",
+          "fog-ground-blend": 0.15,
+          "horizon-fog-blend": 0.6,
+          "atmosphere-blend": 0.7,
+        };
+
         function syncSky(map) {
-          if (map.getTerrain()) {
-            if (map.getLayer("sky")) return;
-            map.addLayer({
-              id: "sky",
-              type: "sky",
-              paint: {
-                "sky-type": "atmosphere",
-                "sky-atmosphere-sun": [0.0, 0.0],
-                "sky-atmosphere-sun-intensity": 15,
-              },
-            });
-            return;
-          }
-          if (map.getLayer("sky")) map.removeLayer("sky");
+          map.setSky(map.getTerrain() ? terrainSky : undefined);
         }
 
         function addHillshade(map) {

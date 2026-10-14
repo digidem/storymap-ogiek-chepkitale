@@ -5,7 +5,7 @@ The image under the subtitle is the logo.
 Each chapter starts with a heading, then the photo, then the caption, then the text.
 Leave the chapters in this order.
 The text under the last line of dashes is the footer.
-A YouTube link on its own line becomes a video.
+A YouTube link on its own line becomes a video. The link text is the title.
 -->
 
 # Dispossession of the Ancestral Lands of the Ogiek of Mount Elgon in Kenya
@@ -87,7 +87,7 @@ Photo credit: Rudo Kemper
 
 To counter this loss of territory, the Ogiek are taking action to advocate for their land rights and protect their ancestral forests. The Chepkitale Indigenous Peoples Development Project (CIPDP) was founded by the community with the mission of undertaking a rights-based approach to forest conservation. A crucial role of the organization is to legitimize traditional Ogiek practices and territory through the creation of official community documents and community mapping. Such strategies have allowed them to claim sovereignty in a language understood by governmental authorities.
 
-https://www.youtube.com/watch?v=nG_LjkWNY1E
+[Video: "The Ogiek Story: Community-led conservation in Mount Elgon, Kenya" (Rights and Resources Institute)](https://www.youtube.com/watch?v=nG_LjkWNY1E)
 
 Currently, CIPDP, with support from the Forest Peoples Programme (FPP) and Awana Digital (formerly Digital Democracy), are empowering the Ogiek community to conduct comprehensive mapping of their ancestral lands, as well as pursuing legal strategies to advocate for land rights nationally and internationally.
 

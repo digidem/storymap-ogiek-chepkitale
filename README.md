@@ -27,7 +27,7 @@ Change the writing in `story.md`. Keep the chapters in the same order as `config
 - Each chapter is a heading, then the photo, then the caption, then the text.
 - The text under the line of dashes at the end is the footer.
 - Write a link as `[Awana Digital](https://awana.digital/)`.
-- A YouTube link on its own line becomes a video.
+- A YouTube link on its own line becomes a video. The link text is the title: `[Title](https://www.youtube.com/watch?v=...)`. A bare URL uses “Watch on YouTube”.
 
 Photos go in `images/`. Point at them from `story.md`, for example `![](images/elgon-road.jpg)`.
 
