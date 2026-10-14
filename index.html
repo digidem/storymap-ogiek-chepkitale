@@ -361,6 +361,27 @@
         });
       }
 
+      // Chapters list only what changed. Fold those changes from the start so
+      // jumping straight to a chapter still shows every layer at the right opacity.
+      const chapterLayers = config.chapters.map((_, index) => {
+        const opacity = new Map();
+        for (const chapter of config.chapters) {
+          for (const update of chapter.onChapterEnter) {
+            opacity.set(update.layer, { layer: update.layer, opacity: 0 });
+          }
+        }
+        for (const chapter of config.chapters.slice(0, index + 1)) {
+          for (const update of chapter.onChapterEnter) {
+            opacity.set(update.layer, {
+              layer: update.layer,
+              opacity: update.opacity,
+              ...(update.duration ? { duration: update.duration } : {}),
+            });
+          }
+        }
+        return [...opacity.values()];
+      });
+
       // add navigation control for interactive chapters
       const navigation = new maplibregl.NavigationControl();
 
@@ -741,8 +762,9 @@
             if (config.showMarkers) {
               marker.setLngLat(chapter.location.center);
             }
-            if (chapter.onChapterEnter.length > 0) {
-              chapter.onChapterEnter.forEach(setLayerOpacity);
+            const chapterIndex = config.chapters.indexOf(chapter);
+            if (chapterIndex !== -1) {
+              chapterLayers[chapterIndex].forEach(setLayerOpacity);
             }
 
             // set interactive properties for chapters set as mapInteractive = true
