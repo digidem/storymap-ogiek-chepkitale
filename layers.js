@@ -103,55 +103,32 @@ var storyLayers = {
       type: "symbol",
       names: ["mount_elgon"],
       layout: {
-        "text-field": "Chepkitale (Mount Elgon)",
-        "text-font": ["DIN Pro Bold", "Arial Unicode MS Regular"],
-        "text-size": 18,
-        "text-anchor": "center",
-        "text-offset": [0, -2],
-        "icon-image": "mountain",
-        "icon-size": 2,
+        "text-field": "Chepkitale\n(Mount Elgon)",
+        "text-font": ["Noto Sans Bold"],
+        "text-size": 15,
+        "text-anchor": "bottom",
+        "text-justify": "center",
+        "text-max-width": 12,
+        "text-offset": [0, -0.15],
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "icon-image": "elgon-peak",
+        "icon-size": 0.9,
+        "icon-anchor": "top",
+        "icon-offset": [0, 5],
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
       },
       paint: {
-        "text-color": "#78553a",
-        "text-halo-color": "hsl(35, 16%, 100%)",
-        "text-halo-width": 0.5,
-        "text-halo-blur": 0.5,
+        "text-color": "#5c4033",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.6,
+        "text-halo-blur": 0.2,
         "text-opacity": 0,
         "icon-opacity": 0,
       },
     },
   ],
-
-  // Optional vector layers. Loaded only when config.useCustomLayers is true.
-  external: {
-    sources: [
-      {
-        name: "nativeland",
-        type: "vector",
-        url: "mapbox://nativeland.cjh3mywgg04aaahpidhgio50e-9ctzy",
-      },
-    ],
-    layers: [
-      {
-        id: "native-land",
-        type: "symbol",
-        source: "nativeland",
-        "source-layer": "Territories",
-        layout: {
-          "text-field": ["to-string", ["get", "Name"]],
-          "text-font": ["Open Sans SemiBold", "Arial Unicode MS Regular"],
-          "text-size": 10,
-          "text-padding": 0,
-        },
-        paint: {
-          "text-color": "#ffffff",
-          "text-halo-color": "hsl(0, 99%, 1%)",
-          "text-halo-width": 1,
-          "text-opacity": 0,
-        },
-      },
-    ],
-  },
 
   toMapLayers(data) {
     const polygons = polygonNames(data);
@@ -183,7 +160,7 @@ var storyLayers = {
   },
 };
 
-// Mapbox draws each feature on its own, so overlapping polygons in one layer
+// Each feature is drawn on its own, so overlapping polygons in one layer
 // stack their opacity. Dissolve a fill layer into a single shape first.
 function dissolve(features) {
   if (features.length < 2) return features;
