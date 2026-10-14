@@ -1,5 +1,5 @@
 // Loads story.md and copies the title, subtitle, logo, footer, and each
-// chapter's title, image, caption, and description onto config.
+// chapter's title, image, caption, description, and video link onto config.
 // Map settings stay in config.js.
 async function applyStory(config) {
   const response = await fetch("./story.md");
