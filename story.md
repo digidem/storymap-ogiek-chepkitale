@@ -96,3 +96,5 @@ Learn more about CIPDP at [https://chepkitale.org](https://chepkitale.org)
 ---
 
 Story map by [Chepkitale Indigenous Peoples Development Project](https://chepkitale.org/), [Forest Peoples Programme](https://forestpeoples.org/), [Awana Digital](https://awana.digital/) and [Conservation Metrics](https://conservationmetrics.com/).
+
+Land cover from [ESA WorldCover](https://esa-worldcover.org/en). 3D terrain from [Mapterhorn](https://mapterhorn.com/attribution).

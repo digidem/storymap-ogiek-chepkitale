@@ -358,6 +358,78 @@
         z-index: 7;
         isolation: isolate;
         transform: translateZ(0);
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .maplibregl-ctrl-worldcover {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .maplibregl-ctrl-worldcover.is-on {
+        background-color: #e7f6df;
+      }
+
+      .map-tool-hints {
+        position: absolute;
+        top: 10px;
+        right: calc(30px + 29px + 0.35rem);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+      }
+
+      .map-tool-hint {
+        display: flex;
+        align-items: center;
+        gap: 0.28rem;
+        height: 29px;
+        padding: 0 0.4rem 0 0.5rem;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.94);
+        color: #242424;
+        font-family: "Source Sans 3", "Segoe UI", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+        animation: hint-nudge 1.35s ease-in-out infinite;
+      }
+
+      .map-tool-hints.is-dismissed {
+        opacity: 0;
+      }
+
+      .map-tool-hints.is-dismissed .map-tool-hint {
+        animation: none;
+      }
+
+      .maplibregl-ctrl-top-right:hover .map-tool-hints.is-dismissed {
+        opacity: 1;
+      }
+
+      @keyframes hint-nudge {
+        0%,
+        100% {
+          transform: translateX(0);
+          opacity: 0.45;
+        }
+        50% {
+          transform: translateX(0.28rem);
+          opacity: 1;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .map-tool-hint {
+          animation: none;
+          opacity: 1;
+        }
       }
 
       .maplibregl-popup {
@@ -370,7 +442,7 @@
       @media (max-width: 750px) {
         #header {
           width: min(34rem, calc(100% - 1.25rem));
-          margin: 4vh auto 32vh;
+          margin: max(4vh, 5.25rem) auto 32vh;
           padding: 0.95rem 0.9rem 0.8rem;
         }
 
@@ -638,13 +710,6 @@
           header.appendChild(image);
         }
 
-        var terrainTip = document.createElement("p");
-        terrainTip.id = "terrain-tip";
-        terrainTip.className = "header-note";
-        terrainTip.innerHTML =
-          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" aria-hidden="true"><rect x="1.25" y="1.25" width="26.5" height="26.5" rx="4" fill="none" stroke="#fff" stroke-width="1.75"/><path fill="#fff" transform="translate(3.5 3.5)" d="m1.754 13.406 4.453-4.851 3.09 3.09 3.281 3.277.969-.969-3.309-3.312 3.844-4.121 6.148 6.886h1.082v-.855l-7.207-8.07-4.84 5.187L6.169 6.57l-5.48 5.965v.871ZM.688 16.844h20.625v1.375H.688Z"/></svg>Note: Click the button in the top-right corner to view the mountain in 3D.';
-        header.appendChild(terrainTip);
-
         if (header.innerText.length > 0) {
           header.classList.add(config.theme);
           header.setAttribute("id", "header");
@@ -865,6 +930,91 @@
           map.setSky(map.getTerrain() ? terrainSky : undefined);
         }
 
+        let worldCoverOn = false;
+        let worldCoverButton = null;
+
+        function setWorldCover(on) {
+          worldCoverOn = on;
+          if (map.getLayer("worldcover-layer")) {
+            map.setPaintProperty("worldcover-layer", "raster-opacity", on ? 1 : 0);
+          }
+          if (!worldCoverButton) return;
+          worldCoverButton.classList.toggle("is-on", on);
+          worldCoverButton.setAttribute("aria-pressed", String(on));
+        }
+
+        function addWorldCover(map) {
+          if (map.getSource("worldcover")) return;
+          map.addSource("worldcover", {
+            type: "raster",
+            tiles: [
+              "https://mapproxy.terrascope.be/mapproxy/service?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=esa-worldcover-map-10m-2021-v2_map&STYLES=&FORMAT=image/png&TRANSPARENT=true&SRS=EPSG:3857&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}",
+            ],
+            tileSize: 256,
+            attribution: "© ESA WorldCover 2021",
+          });
+          const beforeId = [
+            "waterway_tunnel",
+            "water",
+            "tunnel_motorway_link_casing",
+          ].find((id) => map.getLayer(id));
+          map.addLayer(
+            {
+              id: "worldcover-layer",
+              type: "raster",
+              source: "worldcover",
+              paint: {
+                "raster-opacity": 0,
+                "raster-opacity-transition": { duration: 400 },
+                "raster-saturation": -0.75,
+              },
+            },
+            beforeId,
+          );
+        }
+
+        function addWorldCoverToggle() {
+          const group = document.querySelector(".maplibregl-ctrl-terrain")
+            ?.parentElement;
+          if (!group || worldCoverButton) return;
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "maplibregl-ctrl-worldcover";
+          button.setAttribute("aria-label", "Toggle land cover");
+          button.setAttribute("aria-pressed", "false");
+          button.innerHTML =
+            '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><rect x="1" y="1" width="8" height="8" fill="#1b7a32"/><rect x="11" y="1" width="8" height="8" fill="#e2c14d"/><rect x="1" y="11" width="8" height="8" fill="#8fbf4a"/><rect x="11" y="11" width="8" height="8" fill="#d45d8c"/></svg>';
+          button.addEventListener("click", () => setWorldCover(!worldCoverOn));
+          group.appendChild(button);
+          worldCoverButton = button;
+          labelMapTools(group);
+        }
+
+        function labelMapTools(group) {
+          const corner = group.parentElement;
+          if (!corner || corner.querySelector(".map-tool-hints")) return;
+          const hints = document.createElement("div");
+          hints.className = "map-tool-hints";
+          hints.setAttribute("aria-hidden", "true");
+          const arrow =
+            '<svg viewBox="0 0 16 10" width="14" height="9" aria-hidden="true"><path d="M0 5h11M8 1.5 12.5 5 8 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+          for (const button of group.querySelectorAll(":scope > button")) {
+            button.removeAttribute("title");
+            const hint = document.createElement("span");
+            hint.className = "map-tool-hint";
+            const name = button.classList.contains("maplibregl-ctrl-terrain")
+              ? "3D"
+              : "Land cover";
+            hint.innerHTML = `${name}${arrow}`;
+            hints.appendChild(hint);
+          }
+          corner.appendChild(hints);
+        }
+
+        function dismissMapToolHints() {
+          document.querySelector(".map-tool-hints")?.classList.add("is-dismissed");
+        }
+
         function addHillshade(map) {
           if (map.getSource("hillshade-dem")) return;
           map.addSource("hillshade-dem", {
@@ -927,6 +1077,7 @@
         }
 
         map.on("load", async function () {
+          addWorldCover(map);
           addHillshade(map);
           addTerrainSource(map);
           if (config.use3dTerrain) {
@@ -939,6 +1090,7 @@
             "top-right",
           );
           liftTopRightControls(map);
+          addWorldCoverToggle();
           map.on("terrain", () => {
             const enabled = !!map.getTerrain();
             syncSky(map);
@@ -1018,6 +1170,7 @@
               const chapterIndex = config.chapters.indexOf(chapter);
               if (chapterIndex !== -1) {
                 chapterLayers[chapterIndex].forEach(setLayerOpacity);
+                if (chapterIndex > 0) dismissMapToolHints();
               }
 
               // set interactive properties for chapters set as mapInteractive = true
