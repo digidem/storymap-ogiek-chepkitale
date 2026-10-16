@@ -62,7 +62,7 @@ Imagery credit: Bing Satellite
 
 Chepyuk was established as a follow up to colonial policy encouraging self reliance through agriculture following the hunger bouts of the 1950s and 1960s. The Ogiek community were evicted from their homes in Chepkitale on the pretext that they had been allocated de-gazetted area of forest reserve (as opposed to the lands East of the Kimelil river already cleared by white settlers they preferred).
 
-Established in 1971 Chepyuk settlement scheme represents just 5.7% (about 9600 hectares) of the Ogiek customary land. Of this over half the land was allocated to better connect neighbouring communities. The scheme resulted in deforestation, environmental degradation and inter-ethnic conflict culminating in about 2,000 violent killings following the 2008 election violence and the formation of the Sabaot Land Defence Force (SLDF) milita.
+Established in 1971 Chepyuk settlement scheme represents just 5.7% (about 9600 hectares) of the Ogiek customary land. Of this over half the land was allocated to better connected neighbouring communities. The scheme resulted in deforestation, environmental degradation and inter-ethnic conflict culminating in about 2,000 violent killings following the 2008 election violence and the formation of the Sabaot Land Defence Force (SLDF) milita.
 
 ## The gazettement of Chepkitale as a Game Reserve (2000)
 

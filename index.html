@@ -3,6 +3,13 @@
   <head>
     <link rel="icon" href="favicon.ico" sizes="32x32" />
     <meta charset="utf-8" />
+    <script>
+      // Back-forward cache restores the page without running these scripts
+      // again, and the WebGL context is already gone, so the map stays blank.
+      window.addEventListener("pageshow", function (event) {
+        if (event.persisted) location.reload();
+      });
+    </script>
     <title>
       Dispossession of the Ancestral Lands of the Ogiek of Mount Elgon in Kenya
     </title>
@@ -48,7 +55,7 @@
       rel="stylesheet"
     />
     <script src="https://unpkg.com/intersection-observer@0.12.0/intersection-observer.js"></script>
-    <script src="https://unpkg.com/scrollama"></script>
+    <script src="https://unpkg.com/scrollama@3.2.0/build/scrollama.js"></script>
     <style>
       body {
         margin: 0;
@@ -584,12 +591,39 @@
           });
       })();
     </script>
-    <script src="./config.js"></script>
     <script src="https://unpkg.com/polygon-clipping@0.15.7/dist/polygon-clipping.umd.js"></script>
-    <script src="./layers.js"></script>
-    <script src="./story.js"></script>
     <script type="module">
       import * as maplibregl from "https://unpkg.com/maplibre-gl@6.14.0/dist/maplibre-gl.mjs";
+
+      // GitHub Pages caches each file on its own. A new index.html paired with
+      // a cached config.js or story.md throws during startup and the page
+      // stays blank. Stamp every local file with this document's date so they
+      // stay in step with the HTML the browser actually loaded.
+      const published = new Date(document.lastModified);
+      window.STORY_ASSET_VERSION = Number.isNaN(published.getTime())
+        ? ""
+        : published.toISOString();
+
+      function storyAsset(path) {
+        if (!window.STORY_ASSET_VERSION) return path;
+        const join = path.includes("?") ? "&" : "?";
+        return `${path}${join}v=${encodeURIComponent(window.STORY_ASSET_VERSION)}`;
+      }
+      window.storyAsset = storyAsset;
+
+      function loadScript(src) {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = storyAsset(src);
+          script.onload = () => resolve();
+          script.onerror = () => reject(new Error(`Could not load ${src}`));
+          document.head.appendChild(script);
+        });
+      }
+
+      await loadScript("./config.js");
+      await loadScript("./layers.js");
+      await loadScript("./story.js");
 
       applyStory(config).then(function () {
         var initLoad = true;
@@ -1101,8 +1135,8 @@
             });
           });
 
-          const storyData = await fetch(storyLayers.url).then((response) =>
-            response.json(),
+          const storyData = await fetch(storyAsset(storyLayers.url)).then(
+            (response) => response.json(),
           );
           addElgonPeak(map);
           const labelLayerId = firstLabelLayerId();

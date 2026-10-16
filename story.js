@@ -2,7 +2,7 @@
 // chapter's title, image, caption, description, and video link onto config.
 // Map settings stay in config.js.
 async function applyStory(config) {
-  const response = await fetch("./story.md");
+  const response = await fetch(storyAsset("./story.md"));
   if (!response.ok) throw new Error("Could not load story.md");
   const story = parseStory(await response.text());
   if (story.chapters.length !== config.chapters.length) {
